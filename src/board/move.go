@@ -39,7 +39,6 @@ func ConvertMoveToAlgebric(pos Position) string {
 	return fmt.Sprintf("%s%s", COLUMN_Itoa[pos.column], strconv.Itoa(pos.row))
 }
 
-//TODO: Restructure
 func KnightMove(move Position, board Board) Board {
 	HISTORY = append(HISTORY, move)
 

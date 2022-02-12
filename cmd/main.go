@@ -6,12 +6,28 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"strings"
+	"time"
 
+	"github.com/auycro/golang-knight-travel/src/algorithm"
 	"github.com/auycro/golang-knight-travel/src/board"
 )
 
 func main() {
-	gameStart()
+	run_algo := false
+	argsWithProg := os.Args
+	for _, v := range argsWithProg {
+		//fmt.Println(v)
+		if strings.ToLower(v) == "warnsdoff" {
+			run_algo = true
+		}
+	}
+
+	if run_algo {
+		runWarnsdoff()
+	} else {
+		gameStart()
+	}
 }
 
 func gameStart() {
@@ -52,4 +68,21 @@ func gameStart() {
 		game_status = "Win"
 	}
 	fmt.Printf("-----End-----: %s\n", game_status)
+}
+
+func runWarnsdoff() {
+	current_board := board.InitKnightBoard()
+	fmt.Printf("Board Init: %s\n", board.BoardToFen(current_board))
+	fmt.Print(board.BoardToAscii(current_board))
+
+	turn := 0
+	for !board.GAME_END && (turn < 63) {
+		time.Sleep(1 * time.Second)
+		moves := board.GetValidKnightMoves(current_board)
+		next_move := algorithm.WarnsdorffSelectMove(moves, current_board)
+		current_board = board.KnightMove(next_move, current_board)
+		fmt.Printf(" ↪️ Board Status: %s\n", board.BoardToFen(current_board))
+		fmt.Print(board.BoardToAscii(current_board))
+		turn++
+	}
 }
