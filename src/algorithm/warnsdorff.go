@@ -1,7 +1,7 @@
 package algorithm
 
 import (
-	"github.com/auycro/golang-knight-travel/src/board"
+	"github.com/auycro/golang-knight-tour/src/board"
 )
 
 func WarnsdorffSelectMove(moves []board.Position, current_board board.Board) board.Position {

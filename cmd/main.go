@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/auycro/golang-knight-travel/src/algorithm"
-	"github.com/auycro/golang-knight-travel/src/board"
+	"github.com/auycro/golang-knight-tour/src/algorithm"
+	"github.com/auycro/golang-knight-tour/src/board"
 )
 
 func main() {

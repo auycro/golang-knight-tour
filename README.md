@@ -1,4 +1,4 @@
-# golang-knight-travel
+# golang-knight-tour
 
 ## Start Game
 
@@ -103,7 +103,7 @@ move: f2
      a  b  c  d  e  f  g  h
 ```
 
-```
+```sh
 $ go run cmd/main.go warnsdoff random
 Board Init: 8/8/6N1/8/8/8/8/8
    +------------------------+
