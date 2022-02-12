@@ -15,23 +15,27 @@ import (
 
 func main() {
 	run_algo := false
+	random := false
 	argsWithProg := os.Args
 	for _, v := range argsWithProg {
-		//fmt.Println(v)
 		if strings.ToLower(v) == "warnsdoff" {
 			run_algo = true
+		}
+
+		if strings.ToLower(v) == "random" {
+			random = true
 		}
 	}
 
 	if run_algo {
-		runWarnsdoff()
+		runWarnsdoff(random)
 	} else {
 		gameStart()
 	}
 }
 
 func gameStart() {
-	current_board := board.InitKnightBoard()
+	current_board := board.InitKnightBoard(false)
 	fmt.Printf("Board Init: %s\n", board.BoardToFen(current_board))
 	fmt.Print(board.BoardToAscii(current_board))
 
@@ -70,18 +74,19 @@ func gameStart() {
 	fmt.Printf("-----End-----: %s\n", game_status)
 }
 
-func runWarnsdoff() {
-	current_board := board.InitKnightBoard()
+func runWarnsdoff(random bool) {
+	current_board := board.InitKnightBoard(random)
 	fmt.Printf("Board Init: %s\n", board.BoardToFen(current_board))
 	fmt.Print(board.BoardToAscii(current_board))
 
 	turn := 0
-	for !board.GAME_END && (turn < 63) {
+	for !board.GAME_END && (turn < (board.ROW*board.COLUMN)-1) {
 		time.Sleep(1 * time.Second)
 		moves := board.GetValidKnightMoves(current_board)
 		next_move := algorithm.WarnsdorffSelectMove(moves, current_board)
 		current_board = board.KnightMove(next_move, current_board)
-		fmt.Printf(" ↪️ Board Status: %s\n", board.BoardToFen(current_board))
+		fmt.Printf("move: %s\n", board.ConvertMoveToAlgebric(next_move))
+		//fmt.Printf(" ↪️ Board Status: %s\n", board.BoardToFen(current_board))
 		fmt.Print(board.BoardToAscii(current_board))
 		turn++
 	}
