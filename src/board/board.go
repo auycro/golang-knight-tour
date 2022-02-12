@@ -6,29 +6,55 @@ import (
 	"strings"
 )
 
-const DEFAULT_POSITION string = "8/8/8/8/8/8/8/6N1"
-const ROW int = 8
+type Board = map[Position]string
 
-var COLUMN = map[string]int{
-	"a": 0,
-	"b": 1,
-	"c": 2,
-	"d": 3,
-	"e": 4,
-	"f": 5,
-	"g": 6,
-	"h": 7,
+func BoardToAscii(board Board) string {
+	s := "   +------------------------+\n"
+	for i := ROW; i > 0; i-- {
+		// Add ROW Header
+		s += fmt.Sprintf(" %d |", i)
+		for j := 1; j < COLUMN+1; j++ {
+			if board[Position{i, j}] == "" {
+				s += " . "
+			} else {
+				s += fmt.Sprintf(" %s ", board[Position{i, j}])
+			}
+		}
+		// Add EOL
+		s += "|\n"
+	}
+	s += "   +------------------------+\n"
+	s += "     a  b  c  d  e  f  g  h\n"
+	return s
 }
 
-var History = []string{}
-
-func InitKnightBoard() string {
-	History = []string{}
-	return DEFAULT_POSITION
+func BoardToFen(board Board) string {
+	result := ""
+	for i := ROW; i > 0; i-- {
+		blank := 0
+		for j := 1; j < COLUMN+1; j++ {
+			if board[Position{i, j}] == "" {
+				blank++
+			} else {
+				if blank > 0 {
+					result += strconv.Itoa(blank)
+				}
+				result += board[Position{i, j}]
+				blank = 0
+			}
+		}
+		if blank > 0 {
+			result += strconv.Itoa(blank)
+		}
+		if i-1 > 0 {
+			result += "/"
+		}
+	}
+	return result
 }
 
-func ToAscii(board string) string {
-	fen_row := strings.Split(board, "/")
+func FenToAscii(board_fen string) string {
+	fen_row := strings.Split(board_fen, "/")
 	s := "   +------------------------+\n"
 	for i := 0; i < ROW; i++ {
 		// Add Column Header
@@ -56,42 +82,4 @@ func ToAscii(board string) string {
 	s += "   +------------------------+\n"
 	s += "     a  b  c  d  e  f  g  h\n"
 	return s
-}
-
-//TODO: Restructure
-func Move(move string, board string) string {
-	result := ""
-	History = append(History, move)
-	board = strings.Replace(board, "N", "X", -1)
-	old_board := strings.Split(board, "/")
-
-	fen_move := strings.Split(move, "")
-	new_x := COLUMN[fen_move[1]]
-	new_y, _ := strconv.Atoi(fen_move[2])
-
-	for i := 0; i < ROW; i++ {
-		if new_y == (ROW - i) {
-			blank := 0
-			for j := 0; j < len(COLUMN); j++ {
-				if new_x == j {
-					result += strconv.Itoa(blank)
-					result += "N"
-					blank = 0
-				} else {
-					blank++
-				}
-			}
-			if blank != 0 {
-				result += strconv.Itoa(blank)
-			}
-		} else {
-			result += old_board[i]
-		}
-
-		if i < ROW-1 {
-			result += "/"
-		}
-	}
-
-	return result
 }
