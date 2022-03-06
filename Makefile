@@ -10,8 +10,8 @@ all: help
 ## Build:
 build:
 	mkdir -p out/bin
-	## $(GOCMD) build -o out/bin/$(BINARY_NAME) cmd/main.go
-	GO111MODULE=on $(GOCMD) build -mod vendor -o out/bin/$(BINARY_NAME) cmd/main.go
+	$(GOCMD) build -o out/bin/$(BINARY_NAME) cmd/main.go
+## GO111MODULE=on $(GOCMD) build -mod vendor -o out/bin/$(BINARY_NAME) cmd/main.go
 
 run:
 	$(GOCMD) run cmd/main.go
