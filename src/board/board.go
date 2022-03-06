@@ -16,6 +16,8 @@ func BoardToAscii(board Board) string {
 		for j := 1; j < COLUMN+1; j++ {
 			if board[Position{i, j}] == "" {
 				s += " . "
+			} else if (board[Position{i, j}] == "N") {
+				s += fmt.Sprintf(" %s ", "♞")
 			} else {
 				s += fmt.Sprintf(" %s ", board[Position{i, j}])
 			}
